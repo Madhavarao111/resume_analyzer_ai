@@ -428,17 +428,18 @@ def upgrade():
 @login_required
 def create_order():
     try:
-        import razorpay
-        rz_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
-        order = rz_client.order.create({
-            "amount": PLAN_AMOUNT,
-            "currency": "INR",
-            "payment_capture": 1,
-            "notes": {
-                "user_id": str(session["user_id"]),
-                "user_name": session["user_name"]
-            }
-        })
+        import requests as req
+        from requests.auth import HTTPBasicAuth
+        response = req.post(
+            "https://api.razorpay.com/v1/orders",
+            json={
+                "amount": PLAN_AMOUNT,
+                "currency": "INR",
+                "payment_capture": 1
+            },
+            auth=HTTPBasicAuth(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET)
+        )
+        order = response.json()
         return jsonify({
             "order_id": order["id"],
             "amount": PLAN_AMOUNT,
