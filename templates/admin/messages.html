@@ -1,0 +1,20 @@
+{% extends "admin/base.html" %}
+{% block title %}Messages – Admin{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>📬 Contact Messages</h1><p class="text-muted">{{ messages|length }} messages</p></div>
+<div class="admin-card">
+  {% if messages %}
+  {% for m in messages %}
+  <div class="msg-full">
+    <div class="msg-header">
+      <div><strong>{{ m.name }}</strong> · <a href="mailto:{{ m.email }}">{{ m.email }}</a></div>
+      <div class="msg-date">{{ m.created_at[:16] }}</div>
+    </div>
+    <div class="msg-body">{{ m.message }}</div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="empty-state"><div class="es-icon">📬</div><h3>No messages yet</h3></div>
+  {% endif %}
+</div>
+{% endblock %}

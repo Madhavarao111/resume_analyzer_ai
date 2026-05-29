@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}History – ResumeAI Pro{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="dash-header"><div><h1>📋 Analysis History</h1><p class="text-muted">All your past analyses</p></div><a href="/analyze" class="btn btn-primary">+ New Analysis</a></div>
+  {% if analyses %}
+  <div class="analysis-list">
+    {% for a in analyses %}
+    <a href="/result/{{ a.id }}" class="analysis-row">
+      <div class="ar-file">📄 {{ a.filename }}</div>
+      <div class="ar-summary">{{ a.summary[:100] if a.summary else 'View details' }}...</div>
+      <div class="ar-right"><div class="score-badge score-{{ score_color(a.overall_score) }}">{{ a.overall_score }}/100</div><div class="ar-date">{{ a.created_at[:10] }}</div></div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state"><div class="es-icon">📋</div><h3>No history yet</h3><p>Your analyses will appear here</p><a href="/analyze" class="btn btn-primary">Analyze My Resume →</a></div>
+  {% endif %}
+</div>
+{% endblock %}

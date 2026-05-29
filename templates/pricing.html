@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Pricing – ResumeAI Pro{% endblock %}
+{% block content %}
+<div class="pricing-page">
+  <div class="container">
+    <div class="sec-badge">✦ Simple Pricing</div>
+    <h1 class="sec-title">Choose Your Plan</h1>
+    <p class="text-muted" style="text-align:center;margin-bottom:48px">Start free, upgrade when you need more</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pc-header">
+          <div class="pc-icon">🆓</div>
+          <h2>Free</h2>
+          <div class="pc-price">₹0<span>/month</span></div>
+          <p>Perfect for trying out</p>
+        </div>
+        <ul class="pc-features">
+          <li>✅ 3 analyses per day</li>
+          <li>✅ ATS Score</li>
+          <li>✅ Skill gap analysis</li>
+          <li>✅ 8+ AI suggestions</li>
+          <li>✅ Quick wins</li>
+          <li>✅ Analysis history</li>
+          <li>❌ Unlimited analyses</li>
+          <li>❌ Priority support</li>
+        </ul>
+        <a href="/register" class="btn btn-outline btn-full">Get Started Free</a>
+      </div>
+      <div class="pricing-card pricing-card-pro">
+        <div class="pc-popular">Most Popular</div>
+        <div class="pc-header">
+          <div class="pc-icon">⭐</div>
+          <h2>Pro</h2>
+          <div class="pc-price">₹299<span>/month</span></div>
+          <p>For serious job seekers</p>
+        </div>
+        <ul class="pc-features">
+          <li>✅ Unlimited analyses</li>
+          <li>✅ ATS Score</li>
+          <li>✅ Skill gap analysis</li>
+          <li>✅ 8+ AI suggestions</li>
+          <li>✅ Quick wins</li>
+          <li>✅ Analysis history</li>
+          <li>✅ Priority support</li>
+          <li>✅ Pro badge on profile</li>
+        </ul>
+        <a href="/contact" class="btn btn-primary btn-full">Contact to Upgrade →</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

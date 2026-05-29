@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>{% block title %}Admin – ResumeAI Pro{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"/>
+</head>
+<body class="admin-body">
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-brand">🧠 Resume<span class="accent">AI</span> <span class="admin-tag">ADMIN</span></div>
+    <nav class="admin-nav">
+      <a href="/admin" class="admin-link {% if request.path == '/admin' %}active{% endif %}">📊 Dashboard</a>
+      <a href="/admin/users" class="admin-link {% if '/admin/users' in request.path %}active{% endif %}">👥 Users</a>
+      <a href="/admin/analyses" class="admin-link {% if '/admin/analyses' in request.path %}active{% endif %}">📄 Analyses</a>
+      <a href="/admin/messages" class="admin-link {% if '/admin/messages' in request.path %}active{% endif %}">📬 Messages</a>
+    </nav>
+    <a href="/logout" class="admin-logout">↩ Logout</a>
+  </aside>
+  <main class="admin-main">
+    {% block content %}{% endblock %}
+  </main>
+</div>
+</body>
+</html>

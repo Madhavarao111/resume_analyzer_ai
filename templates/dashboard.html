@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Dashboard – ResumeAI Pro{% endblock %}
+{% block content %}
+<div class="container dash-container">
+  <div class="dash-header">
+    <div>
+      <h1>Welcome, {{ user_name }} 👋
+        {% if user_plan == 'pro' %}<span class="pro-tag">⭐ PRO</span>{% endif %}
+      </h1>
+      <p class="text-muted">Your resume analysis dashboard</p>
+    </div>
+    <a href="/analyze" class="btn btn-primary">+ New Analysis</a>
+  </div>
+
+  <!-- Stats -->
+  <div class="dash-cards">
+    <div class="info-card"><div class="ic-icon">📊</div><div class="ic-body"><div class="ic-num">{{ total }}</div><div class="ic-label">Total Analyses</div></div></div>
+    <div class="info-card"><div class="ic-icon">⭐</div><div class="ic-body"><div class="ic-num" style="color:var(--green)">{{ best }}</div><div class="ic-label">Best Score</div></div></div>
+    <div class="info-card"><div class="ic-icon">📈</div><div class="ic-body"><div class="ic-num" style="color:var(--blue)">{{ avg }}</div><div class="ic-label">Avg Score</div></div></div>
+    <div class="info-card {% if user_plan == 'free' and today_count >= free_limit %}info-card-warn{% endif %}">
+      <div class="ic-icon">🔥</div>
+      <div class="ic-body">
+        <div class="ic-num">{{ today_count }}/{% if user_plan == 'pro' %}∞{% else %}{{ free_limit }}{% endif %}</div>
+        <div class="ic-label">Today's Analyses</div>
+      </div>
+    </div>
+  </div>
+
+  {% if user_plan == 'free' %}
+  <div class="upgrade-banner">
+    <div class="ub-left">
+      <span class="ub-icon">⭐</span>
+      <div>
+        <div class="ub-title">Upgrade to Pro — Unlimited Analyses</div>
+        <div class="ub-sub">You've used {{ today_count }}/{{ free_limit }} free analyses today</div>
+      </div>
+    </div>
+    <a href="/upgrade" class="btn btn-gold">Upgrade Now →</a>
+  </div>
+  {% endif %}
+
+  <div class="section-header"><h2>Recent Analyses</h2><a href="/history" class="btn btn-outline btn-sm">View All</a></div>
+  {% if recent %}
+  <div class="analysis-list">
+    {% for a in recent %}
+    <a href="/result/{{ a.id }}" class="analysis-row">
+      <div class="ar-file">📄 {{ a.filename }}</div>
+      <div class="ar-summary">{{ a.summary[:80] if a.summary else 'View details' }}...</div>
+      <div class="ar-right">
+        <div class="score-badge score-{{ score_color(a.overall_score) }}">{{ a.overall_score }}/100</div>
+        <div class="ar-date">{{ a.created_at[:10] }}</div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="es-icon">🎯</div>
+    <h3>No analyses yet</h3>
+    <p>Upload your first resume to get started</p>
+    <a href="/analyze" class="btn btn-primary">Analyze My Resume →</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

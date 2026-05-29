@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}Upgrade to Pro – ResumeAI Pro{% endblock %}
+{% block content %}
+<div class="payment-page">
+  <div class="container">
+
+    <div class="payment-header">
+      <h1>⭐ Upgrade to Pro</h1>
+      <p class="text-muted">Unlock unlimited resume analyses</p>
+    </div>
+
+    <div class="payment-grid">
+
+      <!-- Plan Summary -->
+      <div class="plan-summary">
+        <div class="panel-card">
+          <h2 class="panel-title">📋 Order Summary</h2>
+          <div class="order-item">
+            <div class="oi-left">
+              <div class="oi-name">ResumeAI Pro</div>
+              <div class="oi-desc">Monthly Subscription</div>
+            </div>
+            <div class="oi-price">₹99<span>/month</span></div>
+          </div>
+          <div class="order-divider"></div>
+          <div class="order-total">
+            <span>Total Today</span>
+            <span class="ot-amount">₹99</span>
+          </div>
+          <div class="order-note">Auto-renews every month. Cancel anytime.</div>
+        </div>
+
+        <div class="panel-card features-summary">
+          <h3 class="panel-title">✅ What You Get</h3>
+          <div class="fs-list">
+            <div class="fs-item">⚡ Unlimited analyses per day</div>
+            <div class="fs-item">🤖 8+ AI suggestions per resume</div>
+            <div class="fs-item">🔑 Missing ATS keywords</div>
+            <div class="fs-item">⭐ Quick wins section</div>
+            <div class="fs-item">🎯 Job fit analysis</div>
+            <div class="fs-item">📊 Full history tracking</div>
+            <div class="fs-item">💬 Priority support</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Form -->
+      <div class="payment-form-wrap">
+        <div class="panel-card">
+          <h2 class="panel-title">💳 Payment Details</h2>
+          <p class="text-muted" style="margin-bottom:24px">Secure payment powered by Razorpay</p>
+
+          {% if error %}
+          <div class="alert alert-error">⚠ {{ error }}</div>
+          {% endif %}
+
+          <div class="user-info-box">
+            <div class="ui-row"><span>Name</span><strong>{{ user_name }}</strong></div>
+            <div class="ui-row"><span>Email</span><strong>{{ user_email }}</strong></div>
+            <div class="ui-row"><span>Plan</span><strong>Pro – ₹99/month</strong></div>
+          </div>
+
+          <button id="pay-btn" class="btn btn-gold btn-full btn-lg" onclick="openRazorpay()">
+            ⭐ Pay ₹99 & Activate Pro
+          </button>
+
+          <div class="payment-security">
+            <span>🔒 256-bit SSL Secured</span>
+            <span>·</span>
+            <span>🏦 Razorpay Verified</span>
+            <span>·</span>
+            <span>↩ Cancel Anytime</span>
+          </div>
+
+          <div class="payment-methods">
+            <span class="pm-label">Accepts:</span>
+            <span class="pm-badge">UPI</span>
+            <span class="pm-badge">Cards</span>
+            <span class="pm-badge">Net Banking</span>
+            <span class="pm-badge">Wallets</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Razorpay Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+function openRazorpay() {
+  const btn = document.getElementById('pay-btn');
+  btn.textContent = 'Opening payment...';
+  btn.disabled = true;
+
+  fetch('/create-order', {method: 'POST', headers: {'Content-Type': 'application/json'}})
+  .then(r => r.json())
+  .then(order => {
+    if (order.error) {
+      alert('Error: ' + order.error);
+      btn.textContent = '⭐ Pay ₹99 & Activate Pro';
+      btn.disabled = false;
+      return;
+    }
+
+    const options = {
+      key: order.key,
+      amount: order.amount,
+      currency: 'INR',
+      name: 'ResumeAI Pro',
+      description: 'Monthly Subscription – ₹99/month',
+      order_id: order.order_id,
+      prefill: {
+        name: '{{ user_name }}',
+        email: '{{ user_email }}'
+      },
+      theme: { color: '#7c3aed' },
+      handler: function(response) {
+        // Verify payment on server
+        fetch('/verify-payment', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature
+          })
+        })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            window.location.href = '/payment-success';
+          } else {
+            alert('Payment verification failed. Contact support.');
+          }
+        });
+      },
+      modal: {
+        ondismiss: function() {
+          btn.textContent = '⭐ Pay ₹99 & Activate Pro';
+          btn.disabled = false;
+        }
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+  })
+  .catch(err => {
+    alert('Something went wrong. Please try again.');
+    btn.textContent = '⭐ Pay ₹99 & Activate Pro';
+    btn.disabled = false;
+  });
+}
+</script>
+{% endblock %}

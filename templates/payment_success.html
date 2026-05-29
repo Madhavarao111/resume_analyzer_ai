@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Payment Successful – ResumeAI Pro{% endblock %}
+{% block content %}
+<div class="success-page">
+  <div class="success-card">
+    <div class="success-icon">🎉</div>
+    <h1>Welcome to Pro!</h1>
+    <p>Your payment was successful. You now have <strong>unlimited</strong> resume analyses!</p>
+    <div class="success-details">
+      <div class="sd-item"><span>Plan</span><strong>ResumeAI Pro</strong></div>
+      <div class="sd-item"><span>Amount Paid</span><strong>₹99/month</strong></div>
+      <div class="sd-item"><span>Status</span><strong style="color:var(--green)">✅ Active</strong></div>
+    </div>
+    <a href="/analyze" class="btn btn-primary btn-lg" style="margin-top:24px">Start Analyzing →</a>
+  </div>
+</div>
+{% endblock %}

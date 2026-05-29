@@ -1,0 +1,73 @@
+{% extends "admin/base.html" %}
+{% block title %}Admin Dashboard – ResumeAI Pro{% endblock %}
+{% block content %}
+<div class="admin-header"><h1>📊 Admin Dashboard</h1><p class="text-muted">Platform overview and statistics</p></div>
+
+<div class="admin-stats">
+  <div class="stat-card"><div class="sc-icon" style="background:rgba(124,58,237,0.15)">👥</div><div class="sc-body"><div class="sc-num">{{ total_users }}</div><div class="sc-label">Total Users</div></div></div>
+  <div class="stat-card"><div class="sc-icon" style="background:rgba(6,182,212,0.15)">📄</div><div class="sc-body"><div class="sc-num">{{ total_analyses }}</div><div class="sc-label">Total Analyses</div></div></div>
+  <div class="stat-card"><div class="sc-icon" style="background:rgba(245,158,11,0.15)">⭐</div><div class="sc-body"><div class="sc-num">{{ pro_users }}</div><div class="sc-label">Pro Users</div></div></div>
+  <div class="stat-card"><div class="sc-icon" style="background:rgba(16,185,129,0.15)">🔥</div><div class="sc-body"><div class="sc-num">{{ today_analyses }}</div><div class="sc-label">Today's Analyses</div></div></div>
+  <div class="stat-card"><div class="sc-icon" style="background:rgba(59,130,246,0.15)">📈</div><div class="sc-body"><div class="sc-num">{{ avg_score }}</div><div class="sc-label">Avg Score</div></div></div>
+</div>
+
+<!-- Score Distribution -->
+<div class="admin-grid-2">
+  <div class="admin-card">
+    <h3 class="admin-card-title">📊 Score Distribution</h3>
+    <div class="dist-list">
+      <div class="dist-item"><span class="dist-label">🟢 Excellent (85+)</span><div class="dist-bar"><div class="dist-fill" style="width:{% if total_analyses > 0 %}{{ (score_dist.excellent / total_analyses * 100)|round }}{% else %}0{% endif %}%;background:var(--green)"></div></div><span class="dist-num">{{ score_dist.excellent }}</span></div>
+      <div class="dist-item"><span class="dist-label">🔵 Good (70-84)</span><div class="dist-bar"><div class="dist-fill" style="width:{% if total_analyses > 0 %}{{ (score_dist.good / total_analyses * 100)|round }}{% else %}0{% endif %}%;background:var(--blue)"></div></div><span class="dist-num">{{ score_dist.good }}</span></div>
+      <div class="dist-item"><span class="dist-label">🟡 Average (50-69)</span><div class="dist-bar"><div class="dist-fill" style="width:{% if total_analyses > 0 %}{{ (score_dist.average / total_analyses * 100)|round }}{% else %}0{% endif %}%;background:var(--orange)"></div></div><span class="dist-num">{{ score_dist.average }}</span></div>
+      <div class="dist-item"><span class="dist-label">🔴 Poor (0-49)</span><div class="dist-bar"><div class="dist-fill" style="width:{% if total_analyses > 0 %}{{ (score_dist.poor / total_analyses * 100)|round }}{% else %}0{% endif %}%;background:var(--red)"></div></div><span class="dist-num">{{ score_dist.poor }}</span></div>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h3 class="admin-card-title">📬 Recent Messages</h3>
+    {% if messages %}
+    {% for m in messages %}
+    <div class="msg-item"><div class="msg-from">{{ m.name }} · {{ m.email }}</div><div class="msg-text">{{ m.message[:80] }}...</div><div class="msg-date">{{ m.created_at[:10] }}</div></div>
+    {% endfor %}
+    <a href="/admin/messages" class="btn btn-outline btn-sm" style="margin-top:12px">View All →</a>
+    {% else %}<p class="text-muted">No messages yet</p>{% endif %}
+  </div>
+</div>
+
+<!-- Recent Users -->
+<div class="admin-card">
+  <div class="admin-card-header"><h3 class="admin-card-title">👥 Recent Users</h3><a href="/admin/users" class="btn btn-outline btn-sm">View All</a></div>
+  <table class="admin-table">
+    <thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Status</th><th>Joined</th></tr></thead>
+    <tbody>
+      {% for u in recent_users %}
+      <tr>
+        <td>{{ u.name }}</td>
+        <td>{{ u.email }}</td>
+        <td><span class="plan-badge plan-{{ u.plan }}">{{ u.plan|upper }}</span></td>
+        <td><span class="status-badge status-{{ 'active' if u.is_active else 'inactive' }}">{{ 'Active' if u.is_active else 'Inactive' }}</span></td>
+        <td>{{ u.created_at[:10] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Recent Analyses -->
+<div class="admin-card">
+  <div class="admin-card-header"><h3 class="admin-card-title">📄 Recent Analyses</h3><a href="/admin/analyses" class="btn btn-outline btn-sm">View All</a></div>
+  <table class="admin-table">
+    <thead><tr><th>User</th><th>File</th><th>Score</th><th>Date</th></tr></thead>
+    <tbody>
+      {% for a in recent_analyses %}
+      <tr>
+        <td>{{ a.user_name }}</td>
+        <td>{{ a.filename }}</td>
+        <td><span class="score-pill score-{{ 'green' if a.overall_score >= 70 else 'orange' if a.overall_score >= 50 else 'red' }}">{{ a.overall_score }}</span></td>
+        <td>{{ a.created_at[:10] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Analysis Result – ResumeAI Pro{% endblock %}
+{% block content %}
+<div class="container result-container">
+  <div class="result-header">
+    <div><h1>📊 Analysis Result</h1><p class="text-muted">{{ data.filename }} · {{ data.created_at[:10] }}</p></div>
+    <div class="result-header-btns">
+      <a href="/analyze" class="btn btn-primary">+ New Analysis</a>
+      <a href="/history" class="btn btn-ghost">History</a>
+    </div>
+  </div>
+
+  <div class="scores-grid">
+    <div class="panel-card overall-score-card">
+      <p class="score-label-top">Overall Score</p>
+      <div class="big-score score-{{ score_color(data.overall_score) }}">{{ data.overall_score }}<span>/100</span></div>
+      <div class="score-verdict">{{ score_label(data.overall_score) }}</div>
+      <div class="score-bar-wrap"><div class="score-bar"><div class="score-bar-fill bg-{{ score_color(data.overall_score) }}" style="width:{{ data.overall_score }}%"></div></div></div>
+    </div>
+    <div class="panel-card sub-scores-card">
+      <h3 class="panel-title">Score Breakdown</h3>
+      <div class="sub-score-list">
+        <div class="ss-row"><span class="ss-name">🎯 ATS Score</span><div class="ss-bar-wrap"><div class="ss-bar"><div class="ss-fill bg-{{ score_color(data.ats_score) }}" style="width:{{ data.ats_score }}%"></div></div></div><span class="ss-num score-{{ score_color(data.ats_score) }}">{{ data.ats_score }}</span></div>
+        <div class="ss-row"><span class="ss-name">🔧 Skills Match</span><div class="ss-bar-wrap"><div class="ss-bar"><div class="ss-fill bg-{{ score_color(data.skills_score) }}" style="width:{{ data.skills_score }}%"></div></div></div><span class="ss-num score-{{ score_color(data.skills_score) }}">{{ data.skills_score }}</span></div>
+        <div class="ss-row"><span class="ss-name">💼 Experience</span><div class="ss-bar-wrap"><div class="ss-bar"><div class="ss-fill bg-{{ score_color(data.experience_score) }}" style="width:{{ data.experience_score }}%"></div></div></div><span class="ss-num score-{{ score_color(data.experience_score) }}">{{ data.experience_score }}</span></div>
+        <div class="ss-row"><span class="ss-name">📝 Content</span><div class="ss-bar-wrap"><div class="ss-bar"><div class="ss-fill bg-{{ score_color(data.content_score) }}" style="width:{{ data.content_score }}%"></div></div></div><span class="ss-num score-{{ score_color(data.content_score) }}">{{ data.content_score }}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-card"><h3 class="panel-title">🤖 AI Summary</h3><p class="summary-text">{{ data.summary }}</p></div>
+  {% if data.job_fit_reason %}<div class="panel-card job-fit-card"><h3 class="panel-title">🎯 Job Fit Analysis</h3><p class="summary-text">{{ data.job_fit_reason }}</p></div>{% endif %}
+
+  {% if data.quick_wins %}
+  <div class="panel-card">
+    <h3 class="panel-title">⚡ Quick Wins &nbsp;<span class="panel-sub">Fix in under 10 minutes</span></h3>
+    <div class="quick-wins-list">
+      {% for win in data.quick_wins %}<div class="quick-win-item"><span class="qw-icon">⚡</span><span>{{ win }}</span></div>{% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="skills-grid">
+    <div class="panel-card"><h3 class="panel-title">✅ Skills Found &nbsp;<span class="panel-sub">{{ data.skills_found|length }} matched</span></h3><div class="tags-wrap">{% for s in data.skills_found %}<span class="tag tag-green">✓ {{ s }}</span>{% endfor %}</div></div>
+    <div class="panel-card"><h3 class="panel-title">❌ Skills Missing &nbsp;<span class="panel-sub">{{ data.skills_missing|length }} gaps</span></h3><div class="tags-wrap">{% for s in data.skills_missing %}<span class="tag tag-red">✗ {{ s }}</span>{% endfor %}</div></div>
+  </div>
+
+  {% if data.keywords %}
+  <div class="panel-card"><h3 class="panel-title">🔑 Missing ATS Keywords &nbsp;<span class="panel-sub">Add these exact words</span></h3><div class="tags-wrap" style="margin-top:6px">{% for kw in data.keywords %}<span class="tag tag-orange">+ {{ kw }}</span>{% endfor %}</div></div>
+  {% endif %}
+
+  <div class="panel-card">
+    <h3 class="panel-title">🔧 Detailed Improvements &nbsp;<span class="panel-sub">{{ data.improvements|length }} suggestions</span></h3>
+    <div class="fixes-list">
+      {% for fix in data.improvements %}
+      <div class="fix-row priority-{{ fix.priority }}">
+        <span class="fix-x">✗</span>
+        <div class="fix-body">
+          <div class="fix-title-row"><span class="fix-title">{{ fix.title }}</span><div class="fix-badges"><span class="fix-cat">{{ fix.category }}</span><span class="priority-badge-{{ fix.priority }}">{{ fix.priority|upper }}</span></div></div>
+          <div class="fix-desc">{{ fix.description }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="panel-card"><h3 class="panel-title">💪 Your Strengths &nbsp;<span class="panel-sub">{{ data.strengths|length }} identified</span></h3><div class="strengths-list">{% for s in data.strengths %}<div class="strength-item">✅ {{ s }}</div>{% endfor %}</div></div>
+
+  {% if user_plan == 'free' %}
+  <div class="upgrade-banner"><div class="ub-left"><span class="ub-icon">⭐</span><div><div class="ub-title">Get Unlimited Analyses with Pro</div><div class="ub-sub">Free plan: 3 analyses/day only</div></div></div><a href="/upgrade" class="btn btn-gold">Upgrade to Pro →</a></div>
+  {% endif %}
+
+  <div class="result-footer">
+    <a href="/analyze" class="btn btn-primary btn-lg">Analyze Another →</a>
+    <a href="/history" class="btn btn-outline btn-lg">View History</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}ResumeAI Pro – AI Resume Analyzer{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-blob"></div>
+  <div class="hero-content">
+    <div class="badge">✦ Powered by Llama 3.3 AI · Free to Start</div>
+    <h1>Get Your Resume<br/><span class="gradient-text">Score in Seconds</span></h1>
+    <p class="hero-sub">Upload your resume, paste the job description — get ATS score, skill gap analysis, 8+ AI fixes, and quick wins. Land more interviews.</p>
+    <div class="hero-btns">
+      <a href="/register" class="btn btn-primary btn-lg">Start Free – 3 Analyses/Day →</a>
+      <a href="/pricing" class="btn btn-ghost btn-lg">View Pricing</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-n">8+</span><span class="stat-l">AI Suggestions</span></div>
+      <div class="stat-div"></div>
+      <div class="stat"><span class="stat-n">4</span><span class="stat-l">Score Categories</span></div>
+      <div class="stat-div"></div>
+      <div class="stat"><span class="stat-n">Free</span><span class="stat-l">To Get Started</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <div class="sec-badge">✦ What We Check</div>
+    <h2 class="sec-title">Complete Resume Intelligence</h2>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">🎯</div><h3>ATS Score</h3><p>Know if your resume passes Applicant Tracking Systems</p></div>
+      <div class="feat-card"><div class="feat-icon">🔍</div><h3>Skill Gap Analysis</h3><p>See exactly which skills match and which are missing</p></div>
+      <div class="feat-card"><div class="feat-icon">⚡</div><h3>Quick Wins</h3><p>5 fixes you can do in under 10 minutes</p></div>
+      <div class="feat-card"><div class="feat-icon">🔑</div><h3>Missing Keywords</h3><p>Exact ATS keywords missing from your resume</p></div>
+      <div class="feat-card"><div class="feat-icon">🤖</div><h3>AI Suggestions</h3><p>8+ specific actionable fixes ranked by priority</p></div>
+      <div class="feat-card"><div class="feat-icon">📊</div><h3>Job Fit Score</h3><p>See exactly how well you match the target role</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="container">
+    <div class="sec-badge">✦ Simple Process</div>
+    <h2 class="sec-title">How It Works</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">01</div><div class="step-icon">📄</div><h3>Upload Resume</h3><p>PDF, DOCX or paste text</p></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">02</div><div class="step-icon">💼</div><h3>Add Job Description</h3><p>Paste the job you're targeting</p></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">03</div><div class="step-icon">🤖</div><h3>Get AI Results</h3><p>Scores, gaps, and fixes instantly</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-blob"></div>
+  <h2>Ready to Get More Interviews?</h2>
+  <p>Start free — 3 analyses per day, no credit card needed</p>
+  <a href="/register" class="btn btn-primary btn-lg">Get Started Free →</a>
+</section>
+{% endblock %}

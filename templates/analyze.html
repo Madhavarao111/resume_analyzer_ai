@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Analyze Resume – ResumeAI Pro{% endblock %}
+{% block content %}
+<div class="container analyze-container">
+  <div class="page-header">
+    <h1>📄 Analyze Your Resume</h1>
+    <p class="text-muted">Upload resume + paste job description — AI does the rest</p>
+  </div>
+
+  {% if limit_reached %}
+  <div class="limit-reached-box">
+    <div class="lr-icon">⚠️</div>
+    <h2>Daily Limit Reached</h2>
+    <p>You've used all {{ free_limit }} free analyses for today. Upgrade to Pro for unlimited analyses!</p>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:20px">
+      <a href="/upgrade" class="btn btn-gold btn-lg">⭐ Upgrade to Pro →</a>
+      <a href="/dashboard" class="btn btn-outline">Back to Dashboard</a>
+    </div>
+  </div>
+  {% else %}
+  {% if error %}<div class="alert alert-error">⚠ {{ error }}</div>{% endif %}
+  <form method="POST" action="/analyze" enctype="multipart/form-data" class="analyze-form">
+    <div class="form-grid">
+      <div class="form-section">
+        <div class="panel-card">
+          <h2 class="panel-title">📄 Your Resume</h2>
+          <div class="upload-box">
+            <div class="ub-icon">☁️</div>
+            <p class="ub-title">Upload your resume</p>
+            <p class="ub-sub">PDF, DOCX or TXT · Max 5MB</p>
+            <input type="file" name="resume_file" id="resume_file" accept=".pdf,.docx,.txt" class="file-input"/>
+            <label for="resume_file" class="btn btn-outline">Browse File</label>
+          </div>
+          <div class="or-divider"><span>or paste text below</span></div>
+          <div class="form-group">
+            <label>Resume Text</label>
+            <textarea name="resume_text" rows="12" placeholder="Paste your full resume text here..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="panel-card">
+          <h2 class="panel-title">💼 Job Description</h2>
+          <div class="form-group" style="height:100%">
+            <label>Paste Job Description</label>
+            <textarea name="job_description" rows="20" placeholder="Paste the full job description here..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="submit-section">
+      <div class="submit-info">
+        <span>🤖 Powered by Llama 3.3 AI</span><span>·</span>
+        <span>⏱ Takes 10–15 seconds</span><span>·</span>
+        <span>💾 Results saved automatically</span>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg btn-analyze">🤖 Analyze My Resume</button>
+    </div>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}
